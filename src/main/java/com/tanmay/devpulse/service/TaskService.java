@@ -11,6 +11,7 @@ import com.tanmay.devpulse.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import com.tanmay.devpulse.dto.DashboardResponse;
 
 import java.util.List;
 
@@ -122,5 +123,25 @@ public class TaskService {
         Task task = getTaskEntityById(id);
 
         taskRepository.delete(task);
+    }
+
+    public DashboardResponse getDashboard() {
+
+        User currentUser = getCurrentUser();
+
+        long totalTasks = taskRepository.findByUser(currentUser).size();
+
+        long todo = taskRepository.findByUserAndStatus(currentUser, TaskStatus.TODO).size();
+
+        long inProgress = taskRepository.findByUserAndStatus(currentUser, TaskStatus.IN_PROGRESS).size();
+
+        long completed = taskRepository.findByUserAndStatus(currentUser, TaskStatus.COMPLETED).size();
+
+        return new DashboardResponse(
+                totalTasks,
+                todo,
+                inProgress,
+                completed
+        );
     }
 }
