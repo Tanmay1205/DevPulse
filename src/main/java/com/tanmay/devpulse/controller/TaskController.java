@@ -1,7 +1,7 @@
 package com.tanmay.devpulse.controller;
 
 import com.tanmay.devpulse.dto.TaskRequest;
-import com.tanmay.devpulse.entity.Task;
+import com.tanmay.devpulse.dto.TaskResponse;
 import com.tanmay.devpulse.enums.TaskStatus;
 import com.tanmay.devpulse.service.TaskService;
 import jakarta.validation.Valid;
@@ -20,12 +20,13 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@Valid @RequestBody TaskRequest request) {
+    public TaskResponse createTask(@Valid @RequestBody TaskRequest request) {
         return taskService.createTask(request);
     }
 
     @GetMapping
-    public List<Task> getTasks(@RequestParam(required = false) TaskStatus status) {
+    public List<TaskResponse> getTasks(
+            @RequestParam(required = false) TaskStatus status) {
 
         if (status != null) {
             return taskService.getTasksByStatus(status);
@@ -35,13 +36,14 @@ public class TaskController {
     }
 
     @GetMapping("/{id}")
-    public Task getTaskById(@PathVariable Long id) {
+    public TaskResponse getTaskById(@PathVariable Long id) {
         return taskService.getTaskById(id);
     }
 
     @PutMapping("/{id}")
-    public Task updateTask(@PathVariable Long id,
-                           @Valid @RequestBody TaskRequest request) {
+    public TaskResponse updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskRequest request) {
 
         return taskService.updateTask(id, request);
     }
