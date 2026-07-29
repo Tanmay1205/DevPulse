@@ -1,5 +1,7 @@
 package com.tanmay.devpulse.service;
 
+import com.tanmay.devpulse.dto.LoginRequest;
+import com.tanmay.devpulse.dto.LoginResponse;
 import com.tanmay.devpulse.dto.RegisterRequest;
 import com.tanmay.devpulse.dto.RegisterResponse;
 import com.tanmay.devpulse.entity.User;
@@ -12,11 +14,14 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public AuthService(UserRepository userRepository,
-                       PasswordEncoder passwordEncoder) {
+                       PasswordEncoder passwordEncoder,
+                       JwtService jwtService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     public RegisterResponse register(RegisterRequest request) {
@@ -34,5 +39,19 @@ public class AuthService {
         userRepository.save(user);
 
         return new RegisterResponse("User registered successfully");
+    }
+
+    public LoginResponse login(LoginRequest request) {
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid password");
+        }
+
+        String token = jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(token);
     }
 }

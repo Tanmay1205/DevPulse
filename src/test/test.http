@@ -59,3 +59,42 @@ Content-Type: application/json
   "email": "tanmay@gmail.com",
   "password": "123456"
 }
+
+
+### Register
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Tanmay",
+  "email": "tanmay2@gmail.com",
+  "password": "123456"
+}
+
+###
+
+### Login User
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "tanmay2@gmail.com",
+  "password": "123456"
+}
+
+### Login
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "tanmay2@gmail.com",
+  "password": "123456"
+}
+
+> {% client.global.set("token", response.body.token); %}
+
+###
+
+### Get Tasks
+GET http://localhost:8080/api/tasks
+Authorization: Bearer {{token}}
