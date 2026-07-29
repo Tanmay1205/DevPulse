@@ -5,6 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import java.time.LocalDate;
+import com.tanmay.devpulse.enums.Priority;
 
 @Getter
 @Setter
@@ -19,4 +21,6 @@ public class TaskRequest {
     private String description;
 
     private TaskStatus status;
+    private Priority priority;
+    private LocalDate dueDate;
 }

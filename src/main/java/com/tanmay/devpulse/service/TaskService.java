@@ -12,6 +12,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import com.tanmay.devpulse.dto.DashboardResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 import java.util.List;
 
@@ -42,7 +47,9 @@ public class TaskService {
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
-                task.getStatus()
+                task.getStatus(),
+                task.getPriority(),
+                task.getDueDate()
         );
     }
 
@@ -71,12 +78,18 @@ public class TaskService {
         } else {
             task.setStatus(TaskStatus.TODO);
         }
+        if (request.getPriority() != null) {
+            task.setPriority(request.getPriority());
+        }
+
+        task.setDueDate(request.getDueDate());
 
         task.setUser(getCurrentUser());
 
         Task savedTask = taskRepository.save(task);
 
         return mapToResponse(savedTask);
+
     }
 
     public List<TaskResponse> getAllTasks() {
@@ -112,6 +125,11 @@ public class TaskService {
         if (request.getStatus() != null) {
             task.setStatus(request.getStatus());
         }
+        if (request.getPriority() != null) {
+            task.setPriority(request.getPriority());
+        }
+
+        task.setDueDate(request.getDueDate());
 
         Task updatedTask = taskRepository.save(task);
 
@@ -143,5 +161,45 @@ public class TaskService {
                 inProgress,
                 completed
         );
+    }
+
+    public Page<TaskResponse> getTasks(
+            int page,
+            int size,
+            String sortBy,
+            String direction,
+            String keyword,
+            TaskStatus status) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        User currentUser = getCurrentUser();
+
+        Page<Task> tasks;
+
+        if (keyword != null && !keyword.isBlank()) {
+            tasks = taskRepository.findByUserAndTitleContainingIgnoreCase(
+                    currentUser,
+                    keyword,
+                    pageable
+            );
+        } else if (status != null) {
+            tasks = taskRepository.findByUserAndStatus(
+                    currentUser,
+                    status,
+                    pageable
+            );
+        } else {
+            tasks = taskRepository.findByUser(
+                    currentUser,
+                    pageable
+            );
+        }
+
+        return tasks.map(this::mapToResponse);
     }
 }
