@@ -14,6 +14,7 @@ public class JwtService {
     private static final String SECRET =
             "mysecretkeymysecretkeymysecretkeymysecretkey";
 
+    // 24 hours
     private static final long EXPIRATION = 1000 * 60 * 60 * 24;
 
     private SecretKey getSigningKey() {
@@ -32,24 +33,25 @@ public class JwtService {
     }
 
     public String extractEmail(String token) {
-
-        Claims claims = Jwts.parser()
-                .verifyWith(getSigningKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
-
-        return claims.getSubject();
+        return extractAllClaims(token).getSubject();
     }
 
     public String extractRole(String token) {
+        return extractAllClaims(token).get("role", String.class);
+    }
 
-        Claims claims = Jwts.parser()
+    public boolean isTokenValid(String token) {
+        return extractAllClaims(token)
+                .getExpiration()
+                .after(new Date());
+    }
+
+    private Claims extractAllClaims(String token) {
+
+        return Jwts.parser()
                 .verifyWith(getSigningKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-
-        return claims.get("role", String.class);
     }
 }

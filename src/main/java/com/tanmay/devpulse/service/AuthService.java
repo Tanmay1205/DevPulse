@@ -1,41 +1,39 @@
 package com.tanmay.devpulse.service;
 
-import com.tanmay.devpulse.dto.LoginRequest;
-import com.tanmay.devpulse.dto.LoginResponse;
-import com.tanmay.devpulse.dto.RegisterRequest;
-import com.tanmay.devpulse.dto.RegisterResponse;
+import com.tanmay.devpulse.dto.*;
+import com.tanmay.devpulse.entity.RefreshToken;
 import com.tanmay.devpulse.entity.User;
 import com.tanmay.devpulse.enums.Role;
 import com.tanmay.devpulse.repository.UserRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AuthService {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
-
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private static final Logger logger = LoggerFactory.getLogger(AuthService.class);
+    private final RefreshTokenService refreshTokenService;
 
     public AuthService(UserRepository userRepository,
                        PasswordEncoder passwordEncoder,
-                       JwtService jwtService) {
+                       JwtService jwtService,
+                       RefreshTokenService refreshTokenService) {
+
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.refreshTokenService = refreshTokenService;
     }
 
     public RegisterResponse register(RegisterRequest request) {
 
-        logger.info("Registration attempt for email: {}", request.getEmail());
-
         if (userRepository.existsByEmail(request.getEmail())) {
-            logger.warn("Registration failed. Email already exists: {}", request.getEmail());
-            throw new IllegalArgumentException("Email already exists");
+            throw new RuntimeException("Email already exists");
         }
 
         User user = new User();
@@ -47,33 +45,58 @@ public class AuthService {
 
         userRepository.save(user);
 
-        logger.info("User registered successfully: {}", request.getEmail());
-
         return new RegisterResponse("User registered successfully");
     }
 
     public LoginResponse login(LoginRequest request) {
 
-        logger.info("Login attempt for email: {}", request.getEmail());
-
         User user = userRepository.findByEmail(request.getEmail())
-                .orElseThrow(() -> {
-                    logger.warn("Login failed. User not found: {}", request.getEmail());
-                    return new IllegalArgumentException("Invalid email or password");
-                });
+                .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            logger.warn("Login failed. Invalid password for email: {}", request.getEmail());
-            throw new IllegalArgumentException("Invalid email or password");
+            throw new RuntimeException("Invalid password");
         }
 
-        String token = jwtService.generateToken(
+        String accessToken = jwtService.generateToken(
                 user.getEmail(),
                 user.getRole().name()
         );
 
+// Temporary until RefreshTokenService is implemented
+        String refreshToken = refreshTokenService
+                .createRefreshToken(user)
+                .getToken();
+
         logger.info("Login successful: {}", request.getEmail());
 
-        return new LoginResponse(token);
+        return new LoginResponse(accessToken, refreshToken);
     }
+
+    public LoginResponse refreshToken(RefreshTokenRequest request) {
+
+        RefreshToken refreshToken =
+                refreshTokenService.verifyRefreshToken(request.getRefreshToken());
+
+        User user = refreshToken.getUser();
+
+        String accessToken = jwtService.generateToken(
+                user.getEmail(),
+                user.getRole().name()
+        );
+
+        return new LoginResponse(
+                accessToken,
+                refreshToken.getToken()
+        );
+    }
+
+    public void logout(RefreshTokenRequest request) {
+
+        RefreshToken refreshToken =
+                refreshTokenService.verifyRefreshToken(request.getRefreshToken());
+
+        refreshTokenService.revokeRefreshToken(refreshToken.getUser());
+    }
+
+
 }

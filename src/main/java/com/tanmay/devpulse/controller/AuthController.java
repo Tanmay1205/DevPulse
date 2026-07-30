@@ -1,12 +1,10 @@
 package com.tanmay.devpulse.controller;
 
-import com.tanmay.devpulse.dto.LoginRequest;
-import com.tanmay.devpulse.dto.LoginResponse;
-import com.tanmay.devpulse.dto.RegisterRequest;
-import com.tanmay.devpulse.dto.RegisterResponse;
+import com.tanmay.devpulse.dto.*;
 import com.tanmay.devpulse.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -29,5 +27,21 @@ public class AuthController {
 
         return authService.login(request);
 
+    }
+
+    @PostMapping("/refresh")
+    public LoginResponse refreshToken(
+            @Valid @RequestBody RefreshTokenRequest request) {
+
+        return authService.refreshToken(request);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(
+            @Valid @RequestBody RefreshTokenRequest request) {
+
+        authService.logout(request);
+
+        return ResponseEntity.ok("Logged out successfully");
     }
 }
