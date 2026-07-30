@@ -29,13 +29,26 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests(auth -> auth
+
                         .requestMatchers(
                                 "/api/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"
                         ).permitAll()
-                        .anyRequest().authenticated())
+
+                        .requestMatchers("/api/admin/**")
+                        .hasRole("ADMIN")
+
+                        .requestMatchers("/api/tasks/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .requestMatchers("/api/dashboard/**")
+                        .hasAnyRole("USER", "ADMIN")
+
+                        .anyRequest()
+                        .authenticated()
+                )
 
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable());

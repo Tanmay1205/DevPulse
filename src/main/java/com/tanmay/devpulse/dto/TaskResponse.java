@@ -1,9 +1,10 @@
 package com.tanmay.devpulse.dto;
 
-import com.tanmay.devpulse.enums.TaskStatus;
-import java.time.LocalDate;
 import com.tanmay.devpulse.enums.Priority;
+import com.tanmay.devpulse.enums.TaskStatus;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class TaskResponse {
 
@@ -11,13 +12,22 @@ public class TaskResponse {
     private String title;
     private String description;
     private TaskStatus status;
+    private Priority priority;
+    private LocalDate dueDate;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public TaskResponse() {
+    }
 
     public TaskResponse(Long id,
                         String title,
                         String description,
                         TaskStatus status,
                         Priority priority,
-                        LocalDate dueDate) {
+                        LocalDate dueDate,
+                        LocalDateTime createdAt,
+                        LocalDateTime updatedAt) {
 
         this.id = id;
         this.title = title;
@@ -25,13 +35,8 @@ public class TaskResponse {
         this.status = status;
         this.priority = priority;
         this.dueDate = dueDate;
-    }
-
-    public TaskResponse(Long id, String title, String description, TaskStatus status) {
-        this.id = id;
-        this.title = title;
-        this.description = description;
-        this.status = status;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 
     public Long getId() {
@@ -66,6 +71,35 @@ public class TaskResponse {
         this.status = status;
     }
 
-    private Priority priority;
-    private LocalDate dueDate;
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 }

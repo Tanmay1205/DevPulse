@@ -1,46 +1,39 @@
 package com.tanmay.devpulse.service;
 
+import com.tanmay.devpulse.dto.DashboardResponse;
 import com.tanmay.devpulse.dto.TaskRequest;
 import com.tanmay.devpulse.dto.TaskResponse;
 import com.tanmay.devpulse.entity.Task;
 import com.tanmay.devpulse.entity.User;
+import com.tanmay.devpulse.enums.Priority;
 import com.tanmay.devpulse.enums.TaskStatus;
 import com.tanmay.devpulse.exception.TaskNotFoundException;
 import com.tanmay.devpulse.repository.TaskRepository;
 import com.tanmay.devpulse.repository.UserRepository;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Service;
-import com.tanmay.devpulse.dto.DashboardResponse;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
 public class TaskService {
-
+    private static final Logger logger = LoggerFactory.getLogger(TaskService.class);
     private final TaskRepository taskRepository;
-    private final UserRepository userRepository;
+    private final CurrentUserService currentUserService;
 
     public TaskService(TaskRepository taskRepository,
-                       UserRepository userRepository) {
+                       CurrentUserService currentUserService) {
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
+        this.currentUserService = currentUserService;
     }
 
-    private User getCurrentUser() {
-        Authentication authentication =
-                SecurityContextHolder.getContext().getAuthentication();
-
-        String email = authentication.getName();
-
-        return userRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("User not found"));
-    }
 
     private TaskResponse mapToResponse(Task task) {
         return new TaskResponse(
@@ -49,24 +42,34 @@ public class TaskService {
                 task.getDescription(),
                 task.getStatus(),
                 task.getPriority(),
-                task.getDueDate()
+                task.getDueDate(),
+                task.getCreatedAt(),
+                task.getUpdatedAt()
         );
     }
 
     private Task getTaskEntityById(Long id) {
 
         Task task = taskRepository.findById(id)
-                .orElseThrow(() ->
-                        new TaskNotFoundException("Task not found with id: " + id));
+                .orElseThrow(() -> {
+                    logger.warn("Task not found. Task ID: {}", id);
+                    return new TaskNotFoundException("Task not found with id: " + id);
+                });
 
-        if (!task.getUser().getId().equals(getCurrentUser().getId())) {
-            throw new RuntimeException("You are not authorized to access this task.");
+        if (!task.getUser().getId().equals(currentUserService.getCurrentUser().getId())) {
+            logger.warn("Unauthorized access attempt for Task ID: {}", id);
+            throw new AccessDeniedException(
+                    "You are not authorized to access this task.");
         }
 
         return task;
     }
 
     public TaskResponse createTask(TaskRequest request) {
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        logger.info("Creating task for user: {}", currentUser.getEmail());
 
         Task task = new Task();
 
@@ -78,23 +81,25 @@ public class TaskService {
         } else {
             task.setStatus(TaskStatus.TODO);
         }
+
         if (request.getPriority() != null) {
             task.setPriority(request.getPriority());
         }
 
         task.setDueDate(request.getDueDate());
 
-        task.setUser(getCurrentUser());
+        task.setUser(currentUser);
 
         Task savedTask = taskRepository.save(task);
 
-        return mapToResponse(savedTask);
+        logger.info("Task created successfully. Task ID: {}", savedTask.getId());
 
+        return mapToResponse(savedTask);
     }
 
     public List<TaskResponse> getAllTasks() {
 
-        return taskRepository.findByUser(getCurrentUser())
+        return taskRepository.findByUser(currentUserService.getCurrentUser())
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
@@ -109,14 +114,14 @@ public class TaskService {
 
     public List<TaskResponse> getTasksByStatus(TaskStatus status) {
 
-        return taskRepository.findByUserAndStatus(getCurrentUser(), status)
+        return taskRepository.findByUserAndStatus(currentUserService.getCurrentUser(), status)
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
     }
 
     public TaskResponse updateTask(Long id, TaskRequest request) {
-
+        logger.info("Updating task. Task ID: {}", id);
         Task task = getTaskEntityById(id);
 
         task.setTitle(request.getTitle());
@@ -132,7 +137,7 @@ public class TaskService {
         task.setDueDate(request.getDueDate());
 
         Task updatedTask = taskRepository.save(task);
-
+        logger.info("Task updated successfully. Task ID: {}", updatedTask.getId());
         return mapToResponse(updatedTask);
     }
 
@@ -141,19 +146,31 @@ public class TaskService {
         Task task = getTaskEntityById(id);
 
         taskRepository.delete(task);
+        logger.info("Task deleted successfully. Task ID: {}", id);
     }
 
     public DashboardResponse getDashboard() {
 
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
+
+        logger.info("Fetching dashboard for user: {}", currentUser.getEmail());
 
         long totalTasks = taskRepository.findByUser(currentUser).size();
 
-        long todo = taskRepository.findByUserAndStatus(currentUser, TaskStatus.TODO).size();
+        long todo = taskRepository.findByUserAndStatus(
+                currentUser,
+                TaskStatus.TODO
+        ).size();
 
-        long inProgress = taskRepository.findByUserAndStatus(currentUser, TaskStatus.IN_PROGRESS).size();
+        long inProgress = taskRepository.findByUserAndStatus(
+                currentUser,
+                TaskStatus.IN_PROGRESS
+        ).size();
 
-        long completed = taskRepository.findByUserAndStatus(currentUser, TaskStatus.COMPLETED).size();
+        long completed = taskRepository.findByUserAndStatus(
+                currentUser,
+                TaskStatus.COMPLETED
+        ).size();
 
         return new DashboardResponse(
                 totalTasks,
@@ -162,7 +179,6 @@ public class TaskService {
                 completed
         );
     }
-
     public Page<TaskResponse> getTasks(
             int page,
             int size,
@@ -177,7 +193,7 @@ public class TaskService {
 
         Pageable pageable = PageRequest.of(page, size, sort);
 
-        User currentUser = getCurrentUser();
+        User currentUser = currentUserService.getCurrentUser();
 
         Page<Task> tasks;
 
@@ -201,5 +217,40 @@ public class TaskService {
         }
 
         return tasks.map(this::mapToResponse);
+    }
+
+    public List<TaskResponse> getOverdueTasks() {
+
+        return taskRepository
+                .findByUserAndDueDateBeforeAndStatusNot(
+                        currentUserService.getCurrentUser(),
+                        LocalDate.now(),
+                        TaskStatus.COMPLETED
+                )
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+    public List<TaskResponse> getTodayTasks() {
+
+        return taskRepository
+                .findByUserAndDueDate(
+                        currentUserService.getCurrentUser(),
+                        LocalDate.now()
+                )
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
+    }
+    public List<TaskResponse> getHighPriorityTasks() {
+
+        return taskRepository
+                .findByUserAndPriority(
+                        currentUserService.getCurrentUser(),
+                        Priority.HIGH
+                )
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 }

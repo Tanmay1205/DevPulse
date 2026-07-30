@@ -1,12 +1,14 @@
 package com.tanmay.devpulse.dto;
 
+import com.tanmay.devpulse.enums.Priority;
 import com.tanmay.devpulse.enums.TaskStatus;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+
 import java.time.LocalDate;
-import com.tanmay.devpulse.enums.Priority;
 
 @Getter
 @Setter
@@ -21,6 +23,9 @@ public class TaskRequest {
     private String description;
 
     private TaskStatus status;
+
     private Priority priority;
+
+    @FutureOrPresent(message = "Due date cannot be in the past")
     private LocalDate dueDate;
 }

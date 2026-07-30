@@ -8,6 +8,8 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
@@ -68,4 +70,19 @@ public class TaskController {
 
         return "Task deleted successfully";
     }
+
+    @GetMapping("/overdue")
+    public List<TaskResponse> getOverdueTasks() {
+        return taskService.getOverdueTasks();
+    }
+
+    @GetMapping("/today")
+    public List<TaskResponse> getTodayTasks() {
+        return taskService.getTodayTasks();
+    }
+    @GetMapping("/high-priority")
+    public List<TaskResponse> getHighPriorityTasks() {
+        return taskService.getHighPriorityTasks();
+    }
+
 }
