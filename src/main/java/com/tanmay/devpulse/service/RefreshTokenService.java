@@ -58,9 +58,6 @@ public class RefreshTokenService {
     public void revokeRefreshToken(User user) {
 
         refreshTokenRepository.findByUser(user)
-                .ifPresent(token -> {
-                    token.setRevoked(true);
-                    refreshTokenRepository.save(token);
-                });
+                .ifPresent(refreshTokenRepository::delete);
     }
 }

@@ -239,3 +239,52 @@ Content-Type: application/json
   "token": "29c6a207-ca01-46e5-9a5a-5a40e8e58c95",
   "newPassword": "Password@789"
 }
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email":"tanmaysarode512@gmail.com",
+  "password":"Password@789"
+}
+
+###
+GET http://localhost:8080/api/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YW5tYXlzYXJvZGU1MTJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3ODU0NDExMDcsImV4cCI6MTc4NTUyNzUwN30.X8CS4kvvB3ryw6nIpLNd1W2dL5K4KfZLCgT32HhP1Cw
+
+###
+PUT http://localhost:8080/api/users/profile
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YW5tYXlzYXJvZGU1MTJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3ODU0NDExMDcsImV4cCI6MTc4NTUyNzUwN30.X8CS4kvvB3ryw6nIpLNd1W2dL5K4KfZLCgT32HhP1Cw
+Content-Type: application/json
+
+{
+  "name": "Tanmay S. Sarode",
+  "email": "tanmaysarode512@gmail.com"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email":"tanmay@gmail.com",
+  "password":"123456"
+}
+
+###
+DELETE http://localhost:8080/api/users/account
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YW5tYXlAZ21haWwuY29tIiwicm9sZSI6IkFETUlOIiwiaWF0IjoxNzg1NDQxMzY1LCJleHAiOjE3ODU1Mjc3NjV9.XsIX-LXlDnHGZ8kspPoZS7E2uzEFSLRfCMBaF5vb5Yg
+
+
+### Upload Profile Image
+POST http://localhost:8080/api/users/profile/image
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YW5tYXlzYXJvZGU1MTJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3ODU0NDI4OTIsImV4cCI6MTc4NTUyOTI5Mn0.3MQcOoKmSjTtFq7bTKh_UgFgQksCVSRofGTGXxw-CLY
+Content-Type: multipart/form-data; boundary=WebAppBoundary
+
+--WebAppBoundary
+Content-Disposition: form-data; name="file"; filename="profile.jpeg"
+Content-Type: image/jpeg
+
+< C:\Users\TANMAY\Downloads\profile.jpeg
+--WebAppBoundary--

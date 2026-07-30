@@ -30,6 +30,7 @@ public class RefreshToken {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
+
     public RefreshToken() {
     }
 

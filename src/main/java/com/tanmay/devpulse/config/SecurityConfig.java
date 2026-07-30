@@ -34,16 +34,18 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
-                                "/swagger-ui.html"
+                                "/swagger-ui.html",
+                                "/uploads/**"
                         ).permitAll()
 
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
 
-                        .requestMatchers("/api/tasks/**")
-                        .hasAnyRole("USER", "ADMIN")
-
-                        .requestMatchers("/api/dashboard/**")
+                        .requestMatchers(
+                                "/api/tasks/**",
+                                "/api/dashboard/**",
+                                "/api/users/**"
+                        )
                         .hasAnyRole("USER", "ADMIN")
 
                         .anyRequest()
@@ -53,12 +55,13 @@ public class SecurityConfig {
                 .httpBasic(httpBasic -> httpBasic.disable())
                 .formLogin(form -> form.disable());
 
-        http.addFilterBefore(jwtAuthenticationFilter,
-                UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(
+                jwtAuthenticationFilter,
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         return http.build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
