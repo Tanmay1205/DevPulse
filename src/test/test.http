@@ -155,3 +155,87 @@ Content-Type: application/json
   "email": "tanmay2@gmail.com",
   "password": "123456"
 }
+
+
+###
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Tanmay",
+  "email": "tanmay1205@gmail.com",
+  "password": "Password@123"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "tanmay1205@gmail.com",
+  "password": "Password@123"
+}
+
+###
+POST http://localhost:8080/api/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "3a94123b-4772-4144-b00e-f0184dc09231"
+}
+
+###
+POST http://localhost:8080/api/auth/logout
+Content-Type: application/json
+
+{
+  "refreshToken": "3a94123b-4772-4144-b00e-f0184dc09231"
+}
+
+
+###
+POST http://localhost:8080/api/auth/change-password
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YW5tYXkxMjA1QGdtYWlsLmNvbSIsInJvbGUiOiJVU0VSIiwiaWF0IjoxNzg1NDM3OTg3LCJleHAiOjE3ODU1MjQzODd9.WFfdi8UQjC-9-TIiLLqlEs1kHe-nX8RNWX38Wcqdpzg
+Content-Type: application/json
+
+{
+  "currentPassword":"Password@123",
+  "newPassword":"Password@456"
+}
+
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "tanmay1205@gmail.com",
+  "password": "Password@456"
+}
+
+###
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Tanmay Sarode",
+  "email": "tanmaysarode512@gmail.com",
+  "password": "Password@123"
+}
+
+###
+POST http://localhost:8080/api/auth/forgot-password
+Content-Type: application/json
+
+{
+  "email": "tanmaysarode512@gmail.com"
+}
+
+###
+POST http://localhost:8080/api/auth/reset-password
+Content-Type: application/json
+
+{
+  "token": "29c6a207-ca01-46e5-9a5a-5a40e8e58c95",
+  "newPassword": "Password@789"
+}
