@@ -1,0 +1,93 @@
+.dashboard-page{
+
+    animation:fadeIn .5s ease;
+
+}
+
+@keyframes fadeIn{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.dashboard-title{
+
+    font-size:36px !important;
+
+    font-weight:800 !important;
+
+    color:#1e293b;
+
+}
+
+.dashboard-subtitle{
+
+    color:#64748b;
+
+    margin-bottom:30px !important;
+
+}
+
+.chart-card{
+
+    padding:25px;
+
+    border-radius:20px !important;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06) !important;
+
+    transition:.3s;
+
+}
+
+.chart-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.recent-card{
+
+    padding:25px;
+
+    border-radius:20px !important;
+
+    box-shadow:0 10px 30px rgba(0,0,0,.06) !important;
+
+    transition:.3s;
+
+}
+
+.recent-card:hover{
+
+    transform:translateY(-6px);
+
+}
+
+.dashboard-table .MuiTableCell-head{
+
+    font-weight:700;
+
+    background:#f8fafc;
+
+}
+
+.dashboard-table .MuiTableRow-root:hover{
+
+    background:#f5f9ff;
+
+}

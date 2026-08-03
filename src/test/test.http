@@ -288,3 +288,21 @@ Content-Type: image/jpeg
 
 < C:\Users\TANMAY\Downloads\profile.jpeg
 --WebAppBoundary--
+
+### AI Chat
+POST http://localhost:8080/api/ai/chat
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0YW5tYXlzYXJvZGU1MTJAZ21haWwuY29tIiwicm9sZSI6IlVTRVIiLCJpYXQiOjE3ODU0NDc1MjUsImV4cCI6MTc4NTUzMzkyNX0.WAldgPl6n3w_JwQE5a5INsFFalMAK_LdUp1NbTdnIYU
+Content-Type: application/json
+
+{
+  "prompt": "hello"
+}
+
+###
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "email":"tanmaysarode512@gmail.com",
+  "password":"Password@789"
+}

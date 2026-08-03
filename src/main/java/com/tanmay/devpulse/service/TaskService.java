@@ -21,6 +21,11 @@ import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.time.LocalDate;
+import java.util.Map;
+import java.util.stream.Collectors;
+import com.tanmay.devpulse.dto.RecentTaskResponse;
+
 
 @Service
 public class TaskService {
@@ -172,13 +177,26 @@ public class TaskService {
                 TaskStatus.COMPLETED
         ).size();
 
+        long highPriority = taskRepository.findByUserAndPriority(
+                currentUser,
+                Priority.HIGH
+        ).size();
+
+        long todayTasks = taskRepository.findByUserAndDueDate(
+                currentUser,
+                LocalDate.now()
+        ).size();
+
         return new DashboardResponse(
                 totalTasks,
                 todo,
                 inProgress,
-                completed
+                completed,
+                highPriority,
+                todayTasks
         );
     }
+
     public Page<TaskResponse> getTasks(
             int page,
             int size,
@@ -251,6 +269,39 @@ public class TaskService {
                 )
                 .stream()
                 .map(this::mapToResponse)
+                .toList();
+    }
+
+    public Map<LocalDate, Long> getActivity() {
+
+        User user = currentUserService.getCurrentUser();
+
+        List<Task> tasks = taskRepository.findByUser(user);
+
+        return tasks.stream()
+                .filter(task -> task.getCreatedAt() != null)
+                .collect(Collectors.groupingBy(
+                        task -> task.getCreatedAt().toLocalDate(),
+                        Collectors.counting()
+                ));
+    }
+
+    public List<RecentTaskResponse> getRecentTasks() {
+
+        User user = currentUserService.getCurrentUser();
+
+        return taskRepository
+                .findTop5ByUserOrderByCreatedAtDesc(user)
+                .stream()
+                .map(task -> new RecentTaskResponse(
+                        task.getId(),
+                        task.getTitle(),
+                        task.getPriority() != null
+                                ? task.getPriority().name()
+                                : "NONE",
+                        task.getStatus().name(),
+                        task.getDueDate()
+                ))
                 .toList();
     }
 }

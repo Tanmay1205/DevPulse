@@ -1,0 +1,239 @@
+/* ============================= */
+/* DEVPULSE GLOBAL THEME */
+/* ============================= */
+
+:root{
+
+    --primary:#2563EB;
+    --secondary:#7C3AED;
+    --success:#22C55E;
+    --warning:#F59E0B;
+    --danger:#EF4444;
+
+    --background:#F8FAFC;
+    --card:#FFFFFF;
+
+    --text:#0F172A;
+    --text-light:#64748B;
+
+    --radius:18px;
+
+}
+
+body{
+
+    margin:0;
+
+    background:var(--background);
+
+    font-family:Inter,"Segoe UI",sans-serif;
+
+    color:var(--text);
+
+}
+
+/* Smooth */
+
+*{
+
+    transition:.25s;
+
+    box-sizing:border-box;
+
+}
+
+/* Scrollbar */
+
+::-webkit-scrollbar{
+
+    width:10px;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:#CBD5E1;
+
+    border-radius:20px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:#94A3B8;
+
+}
+
+/* ============================= */
+/* CARD */
+/* ============================= */
+
+.dp-card{
+
+    background:var(--card);
+
+    border-radius:22px;
+
+    box-shadow:0 12px 35px rgba(0,0,0,.06);
+
+    transition:.3s;
+
+}
+
+.dp-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 20px 45px rgba(37,99,235,.12);
+
+}
+
+/* ============================= */
+/* BUTTON */
+/* ============================= */
+
+.dp-btn{
+
+    background:linear-gradient(135deg,var(--primary),var(--secondary))!important;
+
+    color:white!important;
+
+    border-radius:14px!important;
+
+    padding:11px 24px!important;
+
+    font-weight:700!important;
+
+    text-transform:none!important;
+
+}
+
+.dp-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 15px 35px rgba(37,99,235,.35);
+
+}
+
+/* ============================= */
+/* INPUT */
+/* ============================= */
+
+.dp-input .MuiOutlinedInput-root{
+
+    border-radius:14px;
+
+    background:white;
+
+}
+
+.dp-input .MuiOutlinedInput-root:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.dp-input .MuiOutlinedInput-root.Mui-focused{
+
+    box-shadow:0 0 0 5px rgba(37,99,235,.12);
+
+}
+
+/* ============================= */
+/* TABLE */
+/* ============================= */
+
+.dp-table{
+
+    border-radius:18px;
+
+    overflow:hidden;
+
+}
+
+.dp-table .MuiDataGrid-columnHeaders{
+
+    background:#EEF4FF;
+
+    font-weight:bold;
+
+}
+
+.dp-table .MuiDataGrid-row:hover{
+
+    background:#F8FBFF;
+
+}
+
+/* ============================= */
+/* CHIP */
+/* ============================= */
+
+.MuiChip-root{
+
+    border-radius:10px!important;
+
+    font-weight:700!important;
+
+}
+
+/* ============================= */
+/* PAPER */
+/* ============================= */
+
+.MuiPaper-root{
+
+    border-radius:20px!important;
+
+}
+
+/* ============================= */
+/* DIALOG */
+/* ============================= */
+
+.MuiDialog-paper{
+
+    border-radius:22px!important;
+
+}
+
+/* ============================= */
+/* ICON BUTTON */
+/* ============================= */
+
+.MuiIconButton-root:hover{
+
+    transform:scale(1.08);
+
+}
+
+/* ============================= */
+/* APPBAR */
+/* ============================= */
+
+.MuiAppBar-root{
+
+    backdrop-filter:blur(20px);
+
+}
+
+/* ============================= */
+/* PAGE TITLE */
+/* ============================= */
+
+.page-title{
+
+    font-size:34px;
+
+    font-weight:800;
+
+    margin-bottom:25px;
+
+    background:linear-gradient(90deg,#2563EB,#7C3AED);
+
+    -webkit-background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+}

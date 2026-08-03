@@ -52,11 +52,7 @@ public class UserProfileResponse {
     public Role getRole() {
         return role;
     }
-
-    public String getProfileImage() {
-        return profileImage;
-    }
-
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -87,5 +83,8 @@ public class UserProfileResponse {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+    public String getProfileImage() {
+        return profileImage;
     }
 }

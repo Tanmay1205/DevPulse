@@ -1,0 +1,123 @@
+.sidebar{
+
+    background:linear-gradient(180deg,#ffffff,#f8fbff)!important;
+
+    border-right:1px solid #e5e7eb;
+
+    box-shadow:8px 0 30px rgba(0,0,0,.06);
+
+}
+
+.sidebar-menu{
+
+    margin:16px 10px;
+
+}
+
+.sidebar-item{
+
+    border-radius:16px !important;
+
+    margin-bottom:10px !important;
+
+    padding:12px 18px !important;
+
+    color:#475569;
+
+    font-weight:600;
+
+    transition:all .3s ease !important;
+
+}
+
+.sidebar-item .MuiListItemIcon-root{
+
+    color:#64748b;
+
+    min-width:40px;
+
+    transition:.3s;
+
+}
+
+.sidebar-item:hover{
+
+    background:#eef4ff!important;
+
+    transform:translateX(8px);
+
+    box-shadow:0 8px 18px rgba(37,99,235,.10);
+
+}
+
+.sidebar-item:hover .MuiListItemIcon-root{
+
+    color:#2563eb;
+
+    transform:scale(1.15);
+
+}
+
+.sidebar-item.Mui-selected{
+
+    background:linear-gradient(135deg,#2563eb,#7c3aed)!important;
+
+    color:#fff!important;
+
+    box-shadow:0 12px 25px rgba(37,99,235,.35);
+
+}
+
+.sidebar-item.Mui-selected .MuiListItemIcon-root{
+
+    color:#fff!important;
+
+}
+
+.sidebar-divider{
+
+    margin:18px 14px!important;
+
+}
+
+.logout-item{
+
+    border-radius:16px!important;
+
+    margin:10px!important;
+
+    color:#ef4444!important;
+
+    font-weight:600!important;
+
+    transition:.3s!important;
+
+}
+
+.logout-item:hover{
+
+    background:#fff1f2!important;
+
+    transform:translateX(8px);
+
+}
+
+.sidebar-footer{
+
+    position:absolute;
+
+    bottom:15px;
+
+    left:0;
+
+    right:0;
+
+    text-align:center;
+
+    color:#94a3b8;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}

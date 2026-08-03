@@ -1,0 +1,148 @@
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Inter,sans-serif;
+}
+
+.login-page{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:
+            radial-gradient(circle at top left,#4f8cff 0%,transparent 35%),
+            radial-gradient(circle at bottom right,#8a5cff 0%,transparent 35%),
+            linear-gradient(135deg,#eef4ff,#f8fbff,#ffffff);
+}
+
+.login-card{
+    width:100%;
+    max-width:460px;
+    padding:45px;
+    border-radius:26px !important;
+    background:rgba(255,255,255,.88);
+    backdrop-filter:blur(20px);
+    box-shadow:
+            0 25px 60px rgba(0,0,0,.12),
+            inset 0 1px 0 rgba(255,255,255,.6);
+    transition:.35s;
+}
+
+.login-card:hover{
+    transform:translateY(-8px) scale(1.01);
+    box-shadow:
+            0 40px 80px rgba(0,0,0,.18);
+}
+
+.login-logo{
+
+    width:90px;
+    height:90px;
+
+    margin:auto;
+
+    margin-bottom:20px;
+
+    border-radius:50%;
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:34px;
+    font-weight:bold;
+
+    color:white;
+
+    background:linear-gradient(135deg,#1976d2,#6a11cb);
+
+    transition:.4s;
+}
+
+.login-card:hover .login-logo{
+
+    transform:rotate(12deg) scale(1.08);
+
+}
+
+.login-title{
+
+    font-size:36px !important;
+    font-weight:800 !important;
+    text-align:center;
+    color:#1e293b;
+
+}
+
+.login-subtitle{
+
+    margin-top:8px !important;
+    margin-bottom:30px !important;
+    text-align:center;
+    color:#64748b;
+
+}
+
+.login-input .MuiOutlinedInput-root{
+
+    border-radius:14px;
+    transition:.3s;
+
+}
+
+.login-input .MuiOutlinedInput-root:hover{
+
+    transform:translateY(-2px);
+
+}
+
+.login-input .MuiOutlinedInput-root.Mui-focused{
+
+    box-shadow:0 0 0 5px rgba(25,118,210,.15);
+
+}
+
+.login-btn{
+
+    margin-top:10px !important;
+
+    height:52px;
+
+    border-radius:14px !important;
+
+    background:linear-gradient(135deg,#1976d2,#5e35b1) !important;
+
+    font-size:16px !important;
+
+    font-weight:700 !important;
+
+    text-transform:none !important;
+
+    transition:.35s !important;
+
+}
+
+.login-btn:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:0 18px 35px rgba(25,118,210,.35);
+
+}
+
+.login-link{
+
+    color:#1976d2;
+    text-decoration:none;
+    font-weight:600;
+
+}
+
+.login-link:hover{
+
+    color:#512da8;
+
+}

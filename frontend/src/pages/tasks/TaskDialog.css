@@ -1,0 +1,48 @@
+.dialog-paper{
+    border-radius:22px !important;
+    overflow:hidden;
+}
+
+.dialog-header{
+    background:linear-gradient(135deg,#1976d2,#5e35b1);
+    color:white;
+    padding:22px 28px;
+    font-size:24px !important;
+    font-weight:700 !important;
+}
+
+.dialog-content{
+    padding:30px !important;
+}
+
+.dialog-input .MuiOutlinedInput-root{
+    border-radius:14px;
+    transition:.25s;
+}
+
+.dialog-input .MuiOutlinedInput-root:hover{
+    transform:translateY(-2px);
+}
+
+.dialog-input .MuiOutlinedInput-root.Mui-focused{
+    box-shadow:0 0 0 5px rgba(25,118,210,.12);
+}
+
+.cancel-btn{
+    border-radius:12px !important;
+    text-transform:none !important;
+    font-weight:600 !important;
+}
+
+.save-btn{
+    border-radius:12px !important;
+    text-transform:none !important;
+    font-weight:700 !important;
+    background:linear-gradient(135deg,#1976d2,#5e35b1) !important;
+    transition:.3s !important;
+}
+
+.save-btn:hover{
+    transform:translateY(-3px);
+    box-shadow:0 12px 30px rgba(25,118,210,.35);
+}

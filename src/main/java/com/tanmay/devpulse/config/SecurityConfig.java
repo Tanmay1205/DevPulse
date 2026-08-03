@@ -40,11 +40,12 @@ public class SecurityConfig {
 
                         .requestMatchers("/api/admin/**")
                         .hasRole("ADMIN")
-
+                        .requestMatchers("/api/ai/**").authenticated()
                         .requestMatchers(
                                 "/api/tasks/**",
                                 "/api/dashboard/**",
                                 "/api/users/**"
+
                         )
                         .hasAnyRole("USER", "ADMIN")
 
@@ -59,6 +60,10 @@ public class SecurityConfig {
                 jwtAuthenticationFilter,
                 UsernamePasswordAuthenticationFilter.class
         );
+
+        http
+                .csrf(csrf -> csrf.disable())
+                .cors(cors -> {});      // ← Ye line add karo
 
         return http.build();
     }

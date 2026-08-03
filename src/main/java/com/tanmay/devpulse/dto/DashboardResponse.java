@@ -6,16 +6,26 @@ public class DashboardResponse {
     private long todo;
     private long inProgress;
     private long completed;
+    private long highPriority;
+    private long todayTasks;
 
     public DashboardResponse() {
     }
 
-    public DashboardResponse(long totalTasks, long todo,
-                             long inProgress, long completed) {
+    public DashboardResponse(
+            long totalTasks,
+            long todo,
+            long inProgress,
+            long completed,
+            long highPriority,
+            long todayTasks
+    ) {
         this.totalTasks = totalTasks;
         this.todo = todo;
         this.inProgress = inProgress;
         this.completed = completed;
+        this.highPriority = highPriority;
+        this.todayTasks = todayTasks;
     }
 
     public long getTotalTasks() {
@@ -48,5 +58,21 @@ public class DashboardResponse {
 
     public void setCompleted(long completed) {
         this.completed = completed;
+    }
+
+    public long getHighPriority() {
+        return highPriority;
+    }
+
+    public void setHighPriority(long highPriority) {
+        this.highPriority = highPriority;
+    }
+
+    public long getTodayTasks() {
+        return todayTasks;
+    }
+
+    public void setTodayTasks(long todayTasks) {
+        this.todayTasks = todayTasks;
     }
 }

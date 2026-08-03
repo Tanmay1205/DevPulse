@@ -16,7 +16,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     List<Task> findByStatus(TaskStatus status);
 
     List<Task> findByUser(User user);
-
+    List<Task> findTop5ByUserOrderByCreatedAtDesc(User user);
     List<Task> findByUserAndStatus(User user, TaskStatus status);
     Page<Task> findByUser(User user, Pageable pageable);
 
@@ -43,4 +43,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             User user,
             Priority priority
     );
+
+
 }

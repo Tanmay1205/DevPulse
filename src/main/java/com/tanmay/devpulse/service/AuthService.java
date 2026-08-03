@@ -85,7 +85,12 @@ public class AuthService {
 
         logger.info("Login successful: {}", request.getEmail());
 
-        return new LoginResponse(accessToken, refreshToken);
+        return new LoginResponse(
+                accessToken,
+                refreshToken,
+                user.getName(),
+                user.getRole().name()
+        );
     }
 
     public LoginResponse refreshToken(RefreshTokenRequest request) {
@@ -102,7 +107,9 @@ public class AuthService {
 
         return new LoginResponse(
                 accessToken,
-                refreshToken.getToken()
+                refreshToken.getToken(),
+                user.getName(),
+                user.getRole().name()
         );
     }
 
